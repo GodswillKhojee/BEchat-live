@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Dogica";
+  src: url("./assets/dogica/TTF/dogica.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dogica";
+  src: url("./assets/dogica/TTF/dogicabold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dogica Pixel";
+  src: url("./assets/dogica/TTF/dogicapixel.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dogica Pixel";
+  src: url("./assets/dogica/TTF/dogicapixelbold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Dogica", monospace;
+  --font-dogica: "Dogica", monospace;
+  --font-dogica-pixel: "Dogica Pixel", monospace;
+}
+
+/* Logo and page animations */
+@keyframes splash-away {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes logo-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(.7) rotate(-8deg);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes logo-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+
+@keyframes dot-hop {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: .55;
+  }
+  30% {
+    transform: translateY(-7px);
+    opacity: 1;
+  }
+}
+
+@keyframes page-arrive {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
