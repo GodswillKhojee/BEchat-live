@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Loginpage from "./pages/Loginpage";
 import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/Chatpage";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext.jsx";
 
 export default function App() {
   return (
