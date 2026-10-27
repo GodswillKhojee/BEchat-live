@@ -4,7 +4,7 @@ export default function AuthFooter({ mode, onSwitch }) {
   return (
     <>
       <p className="mt-5 text-center text-[10px] leading-6 text-[#817989] sm:text-xs">
-        {isLogin ? "New to Teamspace?" : "Already have an account?"}
+        {isLogin ? "New to ChatLive?" : "Already have an account?"}
         <button
           type="button"
           className="ml-1.5 font-bold text-[#7F5D99] hover:underline"

@@ -10,11 +10,11 @@ export default function BrandPanel() {
       <div className="pointer-events-none absolute right-[12%] top-[8%] h-[90px] w-[90px] rounded-full bg-[#C4A4DA]/15" />
 
       <div className="relative z-10">
-        <div className="mb-8 grid h-[54px] w-[54px] place-items-center rounded-2xl bg-white p-2.5 shadow-xl shadow-[#2a103d]/20 lg:mb-10">
+        <div className="mb-8 h-[60px] w-[60px] lg:mb-10">
           <img
             src={logo}
-            alt="Teamspace logo"
-            className="h-full w-full object-contain"
+            alt="ChatLive logo"
+            className="h-full w-full object-contain brightness-0 invert"
           />
         </div>
 

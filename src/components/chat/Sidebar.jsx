@@ -10,7 +10,7 @@ export default function Sidebar({ user }) {
     >
       <div className="flex flex-col items-center gap-6">
         <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white p-2 shadow-lg shadow-[#2a103d]/20">
-          <img src={logo} alt="Teamspace" className="h-full w-full object-contain" />
+          <img src={logo} alt="ChatLive" className="h-full w-full object-contain" />
         </span>
 
         <Link

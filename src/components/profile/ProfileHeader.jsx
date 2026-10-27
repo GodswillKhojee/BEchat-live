@@ -11,10 +11,12 @@ export default function ProfileHeader({ profile }) {
       <div className="relative z-10 mx-auto w-full max-w-[1100px]">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 text-sm font-bold">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white p-1.5">
-              <img src={logo} alt="" className="h-full w-full object-contain" />
-            </span>
-            Teamspace
+            <img
+              src={logo}
+              alt=""
+              className="h-[60px] w-[60px] object-contain brightness-0 invert"
+            />
+            ChatLive
           </div>
 
           <Link

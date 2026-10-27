@@ -15,7 +15,7 @@ export default function SplashScreen() {
 
       <motion.img
         src={logo}
-        alt="Teamspace logo"
+        alt="ChatLive logo"
         initial={{ opacity: 0, scale: 0.65, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: [0, -6, 0] }}
         transition={{
