@@ -1,5 +1,5 @@
 import { getAvatar } from "../data/avatars";
-import { statusOptions } from "../components/profile/Status";
+import { statusOptions } from "../constants/status";
 
 export default function Avatar({ avatarId, status, className = "h-24 w-24" }) {
   const avatar = getAvatar(avatarId);

@@ -1,20 +1,29 @@
 import { useState } from "react";
 import FormField, { inputClass } from "./FormField";
 
-export default function PasswordField({ mode, value, onChange }) {
+export default function PasswordField({
+  mode = "login",
+  label = "Password",
+  name = "password",
+  value,
+  onChange,
+  placeholder = "At least 8 characters",
+  autoComplete = mode === "login" ? "current-password" : "new-password",
+  minLength = 8,
+}) {
   const [show, setShow] = useState(false);
 
   return (
-    <FormField label="Password">
+    <FormField label={label}>
       <div className="relative">
         <input
           type={show ? "text" : "password"}
-          name="password"
+          name={name}
           value={value}
           onChange={onChange}
-          placeholder="At least 8 characters"
-          autoComplete={mode === "login" ? "current-password" : "new-password"}
-          minLength={8}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          minLength={minLength}
           required
           className={`${inputClass} pr-[58px]`}
         />

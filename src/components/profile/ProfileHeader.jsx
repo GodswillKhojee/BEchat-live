@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import Avatar from "../../common/Avatar";
 
@@ -8,15 +9,20 @@ export default function ProfileHeader({ profile }) {
       <div className="pointer-events-none absolute -bottom-[60px] left-[8%] h-[150px] w-[150px] rounded-full bg-[#C4A4DA]/10" />
 
       <div className="relative z-10 mx-auto w-full max-w-[1100px]">
-        <div className="flex items-center gap-2.5 text-sm font-bold">
-          <span className="grid h-24 w-24 place-items-center ">
-            <img
-              src={logo}
-              alt=""
-              className="h-full w-full object-contain brightness-0 invert"
-            />
-          </span>
-          ChatLive
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-sm font-bold">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white p-1.5">
+              <img src={logo} alt="" className="h-full w-full object-contain" />
+            </span>
+            Teamspace
+          </div>
+
+          <Link
+            to="/chat"
+            className="rounded-[10px] border border-white/25 bg-white/10 px-3.5 py-2 text-[11px] font-semibold text-white transition hover:bg-white/20 sm:text-xs"
+          >
+            Back to chats
+          </Link>
         </div>
 
         <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
