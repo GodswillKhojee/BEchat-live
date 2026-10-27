@@ -7,9 +7,10 @@ export const avatars = [
 ];
 
 export function getAvatar(avatarId) {
-  const avatar = avatars.find(({ id }) => id === avatarId);
-  if (!avatar) {
-    throw new Error(`Unknown avatar: ${avatarId}`);
+  const found = avatars.find(({ id }) => id === avatarId);
+  if (!found) {
+    // Return default female avatar as safe fallback if ID is unknown or "photo"
+    return avatars[0];
   }
-  return avatar;
+  return found;
 }

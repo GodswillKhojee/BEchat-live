@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 import { inputClass } from "../../common/FormField";
 import { formatFileSize, isPreviewableImage } from "../../utils/files";
 
-// Frontend limits for now. Match these to your server / Cloudinary limits later.
 const MAX_FILES = 5;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
@@ -17,7 +16,12 @@ const iconProps = {
   "aria-hidden": true,
 };
 
-export default function MessageInput({ placeholder, onSend }) {
+export default function MessageInput({
+  placeholder,
+  onSend,
+  replyingTo,
+  onCancelReply,
+}) {
   const [text, setText] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [error, setError] = useState("");
@@ -34,6 +38,13 @@ export default function MessageInput({ placeholder, onSend }) {
     () => () => pendingRef.current.forEach((a) => URL.revokeObjectURL(a.url)),
     []
   );
+
+  // Focus textarea when a reply is initiated
+  useEffect(() => {
+    if (replyingTo) {
+      textRef.current?.focus();
+    }
+  }, [replyingTo]);
 
   // Grow with content, up to a maximum height
   useEffect(() => {
@@ -95,6 +106,10 @@ export default function MessageInput({ placeholder, onSend }) {
   };
 
   const onKeyDown = (e) => {
+    if (e.key === "Escape" && replyingTo) {
+      onCancelReply?.();
+      return;
+    }
     if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       submit();
@@ -106,6 +121,28 @@ export default function MessageInput({ placeholder, onSend }) {
       onSubmit={submit}
       className="border-t border-[#ece7f0] bg-white px-3 py-3 sm:px-5"
     >
+      {/* Replying banner */}
+      {replyingTo && (
+        <div className="mb-2 flex items-center justify-between rounded-xl border border-[#C4A4DA]/60 bg-[#fbf8fd] px-3 py-1.5 text-[11px] text-[#603b78]">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="font-bold text-[#4C2365]">
+              Replying to {replyingTo.author}:
+            </span>
+            <span className="truncate italic text-[#817989]">
+              {replyingTo.text || "Attachment"}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={onCancelReply}
+            className="ml-2 font-bold text-[#817989] hover:text-[#c0566b]"
+            aria-label="Cancel reply"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {error && (
         <p role="alert" className="mb-2 text-[11px] leading-5 text-[#c0566b]">
           {error}
@@ -176,7 +213,7 @@ export default function MessageInput({ placeholder, onSend }) {
           type="button"
           onClick={() => fileRef.current?.click()}
           aria-label="Attach files"
-          title="Attach files"
+          title="Attach files (up to 5 files, 10MB each)"
           className="grid h-12 w-12 shrink-0 place-items-center rounded-[10px] border border-[#e6e0e9] bg-white text-[#7F5D99] transition hover:border-[#C4A4DA] hover:bg-[#fbf8fd]"
         >
           <svg {...iconProps} className="h-5 w-5">

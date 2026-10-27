@@ -17,10 +17,17 @@ export default function ProfileForm({
   onReset,
   isDirty,
   message,
+  errorMessage,
 }) {
   return (
-    <Card title="Personal details" description="How you appear to your team.">
+    <Card title="Personal details" description="How you appear to your team in channels and direct messages.">
       <form onSubmit={onSave}>
+        {errorMessage && (
+          <p role="alert" className="mb-3 text-[11px] leading-5 text-[#c0566b] font-medium">
+            {errorMessage}
+          </p>
+        )}
+
         <FormField
           label="Display name"
           name="displayName"
@@ -34,7 +41,7 @@ export default function ProfileForm({
 
         <FormField
           label="Email address"
-          hint="Read only"
+          hint="Account ID"
           type="email"
           name="email"
           value={profile.email}
@@ -107,8 +114,8 @@ export default function ProfileForm({
         </div>
 
         {message && (
-          <p role="status" className="mt-3 text-[11px] leading-5 text-[#7F5D99]">
-            {message}
+          <p role="status" className="mt-3 text-[11px] leading-5 text-[#4f9d7a] font-medium">
+            ✓ {message}
           </p>
         )}
       </form>

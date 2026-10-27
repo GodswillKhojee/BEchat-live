@@ -10,8 +10,17 @@ import {
 } from "../components/profile";
 
 export default function ProfilePage() {
-  const { profile, update, setField, setPhoto, isDirty, save, reset, message } =
-    useProfileForm();
+  const {
+    profile,
+    update,
+    setField,
+    setPhoto,
+    isDirty,
+    save,
+    reset,
+    message,
+    errorMessage,
+  } = useProfileForm();
 
   return (
     <main className="h-dvh w-full overflow-y-auto bg-[#faf8fc] font-sans text-[#211b28]">
@@ -44,6 +53,7 @@ export default function ProfilePage() {
             onReset={reset}
             isDirty={isDirty}
             message={message}
+            errorMessage={errorMessage}
           />
           <PasswordSection />
         </div>

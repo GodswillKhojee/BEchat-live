@@ -1,15 +1,26 @@
 import { useEffect, useRef } from "react";
 import MessageBubble from "./MessageBubble";
 
-export default function MessageList({ conversation }) {
+export default function MessageList({
+  conversation,
+  messages,
+  searchQuery = "",
+  onReply,
+  onEdit,
+  onDelete,
+  onToggleReaction,
+}) {
   const endRef = useRef(null);
-  const { messages } = conversation;
+  const displayMessages = messages ?? conversation?.messages ?? [];
   const isChannel = conversation.type === "channel";
-  const lastMineId = [...messages].reverse().find((m) => m.mine)?.id;
+  const lastMineId = [...displayMessages].reverse().find((m) => m.mine)?.id;
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "end" });
-  }, [messages.length, conversation.id]);
+    // Only auto-scroll to end if not searching through history
+    if (!searchQuery.trim()) {
+      endRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+    }
+  }, [displayMessages.length, conversation?.id, searchQuery]);
 
   return (
     <div
@@ -18,19 +29,27 @@ export default function MessageList({ conversation }) {
       aria-label="Messages"
       className="min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-5"
     >
-      {messages.length === 0 && (
-        <p className="py-10 text-center text-[12px] text-[#817989]">
-          No messages yet. Say hello!
-        </p>
+      {displayMessages.length === 0 && (
+        <div className="py-12 text-center text-[12px] text-[#817989]">
+          {searchQuery.trim() ? (
+            <p>No messages matching &ldquo;{searchQuery.trim()}&rdquo; found in this conversation.</p>
+          ) : (
+            <p>No messages yet. Say hello to get started!</p>
+          )}
+        </div>
       )}
 
-      {messages.map((message, i) => (
+      {displayMessages.map((message, i) => (
         <MessageBubble
           key={message.id}
           message={message}
           isChannel={isChannel}
           isLastMine={message.id === lastMineId}
-          showAuthor={messages[i - 1]?.author !== message.author}
+          showAuthor={displayMessages[i - 1]?.author !== message.author}
+          onReply={onReply}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onToggleReaction={onToggleReaction}
         />
       ))}
 

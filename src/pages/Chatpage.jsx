@@ -20,14 +20,24 @@ export default function ChatPage() {
         onQueryChange={chat.setQuery}
         filter={chat.filter}
         onFilterChange={chat.setFilter}
+        onCreateConversation={chat.createConversation}
         user={user}
         className={hasActive ? "hidden md:flex" : "flex"}
       />
 
       <ChatWindow
         conversation={chat.active}
+        messages={chat.activeMessages}
         onBack={chat.closeConversation}
         onSend={chat.sendMessage}
+        onReply={chat.setReplyingTo}
+        onEdit={chat.editMessage}
+        onDelete={chat.deleteMessage}
+        onToggleReaction={chat.toggleReaction}
+        replyingTo={chat.replyingTo}
+        onCancelReply={() => chat.setReplyingTo(null)}
+        messageSearchQuery={chat.messageSearchQuery}
+        onMessageSearchChange={chat.setMessageSearchQuery}
         className={hasActive ? "flex" : "hidden md:flex"}
       />
     </main>

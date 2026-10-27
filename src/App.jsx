@@ -3,6 +3,7 @@ import Loginpage from "./pages/Loginpage";
 import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/Chatpage";
 import { UserProvider } from "./context/UserContext.jsx";
+import { ProtectedRoute } from "./components/auth";
 
 export default function App() {
   return (
@@ -10,9 +11,22 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Loginpage />} />
-          {/* Not protected yet: add a route guard once JWT auth exists. */}
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>

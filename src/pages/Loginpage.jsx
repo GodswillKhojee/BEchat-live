@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import logo from "../assets/logo.png";
 import useAuthForm from "../hooks/useAuthForm";
+import { useUser } from "../hooks/useUser";
 import {
   SplashScreen,
   BrandPanel,
@@ -15,18 +17,59 @@ import {
 export default function Loginpage() {
   const [introDone, setIntroDone] = useState(false);
   const [mode, setMode] = useState("login");
-  const { form, update } = useAuthForm();
+  const [error, setError] = useState("");
+  const { form, update, reset } = useAuthForm();
+  const { isAuthenticated, login, register } = useUser();
+  const navigate = useNavigate();
+
+  // If user is already authenticated in local demo storage, redirect directly to /chat
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/chat", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIntroDone(true), 2200);
+    const timer = window.setTimeout(() => setIntroDone(true), 2000);
     return () => window.clearTimeout(timer);
   }, []);
 
+  const handleQuickDemo = () => {
+    login({ email: "joy@example.com", password: "password123", isDemo: true });
+    navigate("/chat");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(
-      `${mode === "login" ? "Login" : "Registration"} UI is ready. Connect your backend API next.`
-    );
+    setError("");
+
+    if (!form.email || !form.email.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!form.password || form.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (mode === "register") {
+      if (!form.name || form.name.trim().length < 2) {
+        setError("Please enter your full name.");
+        return;
+      }
+      register({ name: form.name, email: form.email, password: form.password });
+    } else {
+      login({ email: form.email, password: form.password, isDemo: true });
+    }
+
+    navigate("/chat");
+  };
+
+  const handleModeSwitch = (newMode) => {
+    setMode(newMode);
+    setError("");
+    reset();
   };
 
   return (
@@ -53,7 +96,7 @@ export default function Loginpage() {
               <span>ChatLive</span>
             </div>
 
-            <AuthTabs mode={mode} onChange={setMode} />
+            <AuthTabs mode={mode} onChange={handleModeSwitch} />
 
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -68,14 +111,22 @@ export default function Loginpage() {
                 <AuthForm
                   mode={mode}
                   form={form}
+                  error={error}
                   onChange={update}
                   onSubmit={handleSubmit}
+                  onQuickDemo={handleQuickDemo}
                 />
               </motion.div>
             </AnimatePresence>
 
-            <GoogleButton onClick={() => alert("Add Google OAuth here.")} />
-            <AuthFooter mode={mode} onSwitch={setMode} />
+            <GoogleButton
+              onClick={() =>
+                alert(
+                  "Google OAuth authentication is planned for Phase 2 once backend and cloud client credentials are configured. For Phase 1 demo access, use the form or Quick Fill."
+                )
+              }
+            />
+            <AuthFooter mode={mode} onSwitch={handleModeSwitch} />
           </div>
         </section>
       </motion.section>
