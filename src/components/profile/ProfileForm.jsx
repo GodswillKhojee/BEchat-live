@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import Card from "../../common/Card";
-import FormField, { inputClass } from "../auth/FormField";
+import FormField, { inputClass } from "../../common/FormField";
 
 const supported =
   typeof Intl.supportedValuesOf === "function"

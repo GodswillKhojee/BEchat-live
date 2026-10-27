@@ -1,5 +1,5 @@
 import { useState } from "react";
-import FormField, { inputClass } from "./FormField";
+import FormField, { inputClass } from "../../common/FormField";
 
 export default function PasswordField({
   mode = "login",

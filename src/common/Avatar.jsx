@@ -1,16 +1,19 @@
 import { getAvatar } from "../data/avatars";
 import { statusOptions } from "../constants/status";
 
-export default function Avatar({ avatarId, status, className = "h-24 w-24" }) {
+export default function Avatar({ avatarId, photo, status, className = "h-24 w-24" }) {
+  const usePhoto = avatarId === "photo" && Boolean(photo);
   const avatar = getAvatar(avatarId);
   const current = statusOptions.find((option) => option.id === status);
 
   return (
     <div className={`relative shrink-0 ${className}`}>
       <img
-        src={avatar.src}
-        alt={avatar.label}
-        className="h-full w-full rounded-full bg-[#C4A4DA] object-cover ring-4 ring-white/50 [image-rendering:pixelated]"
+        src={usePhoto ? photo : avatar.src}
+        alt={usePhoto ? "Profile photo" : avatar.label}
+        className={`h-full w-full rounded-full bg-[#C4A4DA] object-cover ring-4 ring-white/50 ${
+          usePhoto ? "" : "[image-rendering:pixelated]"
+        }`}
       />
       {current && (
         <span

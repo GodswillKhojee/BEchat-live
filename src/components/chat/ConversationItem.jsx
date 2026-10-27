@@ -3,9 +3,14 @@ import { formatListTime } from "../../utils/formatTime";
 
 function previewOf(conversation, last) {
   if (!last) return "No messages yet";
-  if (last.mine) return `You: ${last.text}`;
-  if (conversation.type === "channel") return `${last.author}: ${last.text}`;
-  return last.text;
+
+  const files = last.attachments?.length ?? 0;
+  const body =
+    last.text || (files === 1 ? "Sent an attachment" : `Sent ${files} attachments`);
+
+  if (last.mine) return `You: ${body}`;
+  if (conversation.type === "channel") return `${last.author}: ${body}`;
+  return body;
 }
 
 export default function ConversationItem({ conversation, active, onSelect }) {

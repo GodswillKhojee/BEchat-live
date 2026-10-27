@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import FormField from "./FormField";
+import FormField from "../../common/FormField";
 import PasswordField from "./PasswordField";
 
 export default function AuthForm({ mode, form, onChange, onSubmit }) {

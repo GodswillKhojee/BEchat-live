@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { mockUser } from "../data/Mockuser";
+import { useUser } from "./useUser";
 
-export default function useProfileForm(initial = mockUser) {
-  const [profile, setProfile] = useState(initial);
-  const [saved, setSaved] = useState(initial);
+export default function useProfileForm() {
+  const { user, updateUser } = useUser();
+  const [profile, setProfile] = useState(user);
   const [message, setMessage] = useState("");
 
   const setField = (name, value) => {
@@ -13,19 +13,29 @@ export default function useProfileForm(initial = mockUser) {
 
   const update = (e) => setField(e.target.name, e.target.value);
 
-  const isDirty = JSON.stringify(profile) !== JSON.stringify(saved);
+  // Passing null removes the photo and falls back to a pixel avatar
+  const setPhoto = (photo) => {
+    setProfile((prev) => ({
+      ...prev,
+      photo,
+      avatar: photo ? "photo" : prev.avatar === "photo" ? "female" : prev.avatar,
+    }));
+    setMessage("");
+  };
+
+  const isDirty = Object.keys(profile).some((key) => profile[key] !== user[key]);
 
   const reset = () => {
-    setProfile(saved);
+    setProfile(user);
     setMessage("");
   };
 
   // Placeholder: replace with an API call (PATCH /users/me) later.
   const save = (e) => {
     e?.preventDefault();
-    setSaved(profile);
+    updateUser(profile);
     setMessage("Saved for this session only. Connect your API to store changes.");
   };
 
-  return { profile, update, setField, isDirty, save, reset, message };
+  return { profile, update, setField, setPhoto, isDirty, save, reset, message };
 }

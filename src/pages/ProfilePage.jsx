@@ -10,7 +10,7 @@ import {
 } from "../components/profile";
 
 export default function ProfilePage() {
-  const { profile, update, setField, isDirty, save, reset, message } =
+  const { profile, update, setField, setPhoto, isDirty, save, reset, message } =
     useProfileForm();
 
   return (
@@ -25,8 +25,10 @@ export default function ProfilePage() {
       >
         <div className="flex flex-col gap-5">
           <AvatarPicker
-            value={profile.avatar}
-            onChange={(id) => setField("avatar", id)}
+            avatar={profile.avatar}
+            photo={profile.photo}
+            onSelect={(id) => setField("avatar", id)}
+            onPhotoChange={setPhoto}
           />
           <StatusPicker
             value={profile.status}

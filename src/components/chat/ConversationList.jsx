@@ -36,7 +36,12 @@ export default function ConversationList({
             aria-label="Your profile"
             className="md:hidden"
           >
-            <Avatar avatarId={user.avatar} status={user.status} className="h-9 w-9" />
+            <Avatar
+              avatarId={user.avatar}
+              photo={user.photo}
+              status={user.status}
+              className="h-9 w-9"
+            />
           </Link>
         </div>
 

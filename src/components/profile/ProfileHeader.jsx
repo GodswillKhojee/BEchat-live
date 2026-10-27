@@ -26,7 +26,11 @@ export default function ProfileHeader({ profile }) {
         </div>
 
         <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-          <Avatar avatarId={profile.avatar} status={profile.status} />
+          <Avatar
+            avatarId={profile.avatar}
+            photo={profile.photo}
+            status={profile.status}
+          />
 
           <div className="min-w-0">
             <p className="mb-2 text-[10px] font-bold tracking-[.17em] text-[#D9C2E8] lg:text-[11px]">

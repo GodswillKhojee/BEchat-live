@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { mockConversations } from "../data/mockConversations";
+import { scheduleMockReceipts } from "../utils/mockReceipts";
 
 const lastOf = (conversation) =>
   conversation.messages[conversation.messages.length - 1];
@@ -11,6 +12,28 @@ export default function useChat(initial = mockConversations) {
   const [activeId, setActiveId] = useState(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all"); // "all" | "channel" | "dm"
+
+  const timersRef = useRef([]);
+  const latestRef = useRef(conversations);
+
+  useEffect(() => {
+    latestRef.current = conversations;
+  }, [conversations]);
+
+  // On leaving the page: stop mock timers and free attachment URLs
+  useEffect(
+    () => () => {
+      timersRef.current.forEach((cancel) => cancel());
+      latestRef.current.forEach((c) =>
+        c.messages.forEach((m) =>
+          m.attachments?.forEach((a) => {
+            if (a.url.startsWith("blob:")) URL.revokeObjectURL(a.url);
+          })
+        )
+      );
+    },
+    []
+  );
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -29,6 +52,21 @@ export default function useChat(initial = mockConversations) {
 
   const active = conversations.find((c) => c.id === activeId) ?? null;
 
+  const patchMessage = useCallback((conversationId, messageId, patch) => {
+    setConversations((prev) =>
+      prev.map((c) =>
+        c.id !== conversationId
+          ? c
+          : {
+              ...c,
+              messages: c.messages.map((m) =>
+                m.id === messageId ? { ...m, ...patch } : m
+              ),
+            }
+      )
+    );
+  }, []);
+
   const selectConversation = (id) => {
     setActiveId(id);
     setConversations((prev) =>
@@ -38,22 +76,33 @@ export default function useChat(initial = mockConversations) {
 
   const closeConversation = () => setActiveId(null);
 
-  const sendMessage = (text) => {
+  const sendMessage = (text, attachments = []) => {
     const trimmed = text.trim();
-    if (!trimmed || !activeId) return;
+    if ((!trimmed && attachments.length === 0) || !active) return;
 
+    const conversationId = active.id;
     const message = {
       id: `m-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       mine: true,
       author: "You",
       avatar: null,
       text: trimmed,
+      attachments, // [{ id, name, size, type, url }]
+      status: "sent",
+      readBy: [],
       at: new Date(),
     };
 
     setConversations((prev) =>
       prev.map((c) =>
-        c.id === activeId ? { ...c, messages: [...c.messages, message] } : c
+        c.id === conversationId ? { ...c, messages: [...c.messages, message] } : c
+      )
+    );
+
+    // MOCK: replace with socket.emit("message:send", ...) and real receipt events.
+    timersRef.current.push(
+      scheduleMockReceipts(active, (patch) =>
+        patchMessage(conversationId, message.id, patch)
       )
     );
   };

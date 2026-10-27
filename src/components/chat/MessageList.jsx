@@ -5,6 +5,7 @@ export default function MessageList({ conversation }) {
   const endRef = useRef(null);
   const { messages } = conversation;
   const isChannel = conversation.type === "channel";
+  const lastMineId = [...messages].reverse().find((m) => m.mine)?.id;
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
@@ -28,6 +29,7 @@ export default function MessageList({ conversation }) {
           key={message.id}
           message={message}
           isChannel={isChannel}
+          isLastMine={message.id === lastMineId}
           showAuthor={messages[i - 1]?.author !== message.author}
         />
       ))}

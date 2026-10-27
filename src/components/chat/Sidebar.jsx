@@ -36,7 +36,12 @@ export default function Sidebar({ user }) {
       </div>
 
       <Link to="/profile" title="Your profile" aria-label="Your profile">
-        <Avatar avatarId={user.avatar} status={user.status} className="h-11 w-11" />
+        <Avatar
+          avatarId={user.avatar}
+          photo={user.photo}
+          status={user.status}
+          className="h-11 w-11"
+        />
       </Link>
     </nav>
   );

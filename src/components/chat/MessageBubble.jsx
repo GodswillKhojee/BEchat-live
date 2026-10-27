@@ -1,9 +1,28 @@
 import { motion } from "motion/react";
 import Avatar from "../../common/Avatar";
+import AttachmentList from "./AttachmentList";
+import ReadReceipt from "./Readreceipt";
 import { formatTime } from "../../utils/formatTime";
 
-export default function MessageBubble({ message, showAuthor, isChannel }) {
+function readByLabel(names) {
+  return names.length <= 3 ? names.join(", ") : `${names.length} people`;
+}
+
+export default function MessageBubble({ message, showAuthor, isChannel, isLastMine }) {
   const { mine } = message;
+  const attachments = message.attachments ?? [];
+  const readBy = message.readBy ?? [];
+
+  const meta = (
+    <span
+      className={`inline-flex items-center gap-1 align-middle text-[9px] ${
+        mine ? "text-[#d8c6e3]" : "text-[#a59cab]"
+      }`}
+    >
+      {formatTime(message.at)}
+      {mine && <ReadReceipt status={message.status} />}
+    </span>
+  );
 
   return (
     <motion.div
@@ -34,15 +53,25 @@ export default function MessageBubble({ message, showAuthor, isChannel }) {
               : "rounded-bl-md border border-[#ece7f0] bg-white text-[#211b28]"
           }`}
         >
-          {message.text}
-          <span
-            className={`ml-2 inline-block translate-y-[2px] text-[9px] ${
-              mine ? "text-[#d8c6e3]" : "text-[#a59cab]"
-            }`}
-          >
-            {formatTime(message.at)}
-          </span>
+          {attachments.length > 0 && (
+            <AttachmentList attachments={attachments} mine={mine} />
+          )}
+
+          {message.text ? (
+            <>
+              {message.text}
+              <span className="ml-2">{meta}</span>
+            </>
+          ) : (
+            <div className="mt-1 flex justify-end">{meta}</div>
+          )}
         </div>
+
+        {mine && isChannel && isLastMine && readBy.length > 0 && (
+          <p className="mt-1 text-right text-[10px] text-[#a59cab]">
+            Read by {readByLabel(readBy)}
+          </p>
+        )}
       </div>
     </motion.div>
   );
