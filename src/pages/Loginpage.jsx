@@ -39,7 +39,7 @@ export default function Loginpage() {
     navigate("/chat");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -53,17 +53,20 @@ export default function Loginpage() {
       return;
     }
 
-    if (mode === "register") {
-      if (!form.name || form.name.trim().length < 2) {
-        setError("Please enter your full name.");
-        return;
+    try {
+      if (mode === "register") {
+        if (!form.name || form.name.trim().length < 2) {
+          setError("Please enter your full name.");
+          return;
+        }
+        await register({ name: form.name, email: form.email, password: form.password, isDemo: false });
+      } else {
+        await login({ email: form.email, password: form.password, isDemo: false });
       }
-      register({ name: form.name, email: form.email, password: form.password });
-    } else {
-      login({ email: form.email, password: form.password, isDemo: true });
+      navigate("/chat");
+    } catch (err) {
+      setError(err.message || "Authentication failed. Please check credentials or server connection.");
     }
-
-    navigate("/chat");
   };
 
   const handleModeSwitch = (newMode) => {
