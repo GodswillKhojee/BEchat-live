@@ -37,9 +37,9 @@ export default function Sidebar({ user }) {
 
       <Link to="/profile" title="Your profile" aria-label="Your profile">
         <Avatar
-          avatarId={user.avatar}
-          photo={user.photo}
-          status={user.status}
+          avatarId={user?.avatar}
+          photo={user?.photo}
+          status={user?.status}
           className="h-11 w-11"
         />
       </Link>

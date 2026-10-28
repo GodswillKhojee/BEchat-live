@@ -14,7 +14,7 @@ function previewOf(conversation, last) {
 }
 
 export default function ConversationItem({ conversation, active, onSelect }) {
-  const last = conversation.messages[conversation.messages.length - 1];
+  const last = conversation.messages?.[conversation.messages.length - 1];
   const title =
     conversation.type === "channel" ? `# ${conversation.name}` : conversation.name;
 

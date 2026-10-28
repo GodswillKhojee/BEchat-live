@@ -39,6 +39,21 @@ test("Time formatting utilities", () => {
   const now = new Date();
   assert.ok(formatTime(now));
   assert.ok(formatListTime(now));
+
+  // ISO date strings from localStorage
+  const isoString = "2026-10-27T10:00:00.000Z";
+  assert.ok(formatTime(isoString));
+  assert.ok(formatListTime(isoString));
+
+  // Timestamp numbers
+  assert.ok(formatTime(Date.now()));
+  assert.ok(formatListTime(Date.now()));
+
+  // Fallback for null/undefined/invalid values without throwing
+  assert.ok(formatTime(null));
+  assert.ok(formatListTime("invalid-date-string"));
+
   const past = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
   assert.ok(formatListTime(past));
 });
+

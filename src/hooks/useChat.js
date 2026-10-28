@@ -48,9 +48,11 @@ export default function useChat() {
       .filter((c) => filter === "all" || c.type === filter)
       .filter((c) => {
         if (!q) return true;
+        const lastMsg = lastOf(c);
         return (
           c.name.toLowerCase().includes(q) ||
-          (lastOf(c)?.text?.toLowerCase().includes(q) ?? false)
+          (lastMsg?.text?.toLowerCase().includes(q) ?? false) ||
+          (lastMsg?.attachments?.some((a) => a.name?.toLowerCase().includes(q)) ?? false)
         );
       })
       .sort((a, b) => {
@@ -70,7 +72,11 @@ export default function useChat() {
     if (!active) return [];
     const q = messageSearchQuery.trim().toLowerCase();
     if (!q) return active.messages;
-    return active.messages.filter((m) => m.text?.toLowerCase().includes(q));
+    return active.messages.filter(
+      (m) =>
+        m.text?.toLowerCase().includes(q) ||
+        m.attachments?.some((a) => a.name?.toLowerCase().includes(q))
+    );
   }, [active, messageSearchQuery]);
 
   const patchMessage = useCallback((conversationId, messageId, patch) => {

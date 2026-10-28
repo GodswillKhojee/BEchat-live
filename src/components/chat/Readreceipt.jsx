@@ -5,8 +5,10 @@ export default function ReadReceipt({ status = "sent" }) {
   const double = status !== "sent";
   const tone = status === "read" ? "text-white" : "text-white/50";
 
+  const label = labels[status] || labels.sent;
+
   return (
-    <span className={`inline-flex ${tone}`} title={labels[status]} role="img" aria-label={labels[status]}>
+    <span className={`inline-flex ${tone}`} title={label} role="img" aria-label={label}>
       <svg
         viewBox="0 0 18 12"
         fill="none"

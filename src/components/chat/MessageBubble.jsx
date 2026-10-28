@@ -144,7 +144,7 @@ export default function MessageBubble({
 
           {/* Floating Action Menu (Reply, React, Edit, Delete) */}
           <div
-            className={`absolute -top-3.5 z-10 hidden items-center gap-0.5 rounded-full border border-[#e5dfe9] bg-white px-1.5 py-0.5 shadow-md transition-all group-hover:flex ${
+            className={`absolute -top-3.5 z-10 hidden items-center gap-0.5 rounded-full border border-[#e5dfe9] bg-white px-1.5 py-0.5 shadow-md transition-all group-hover:flex focus-within:flex ${
               mine ? "right-1" : "left-1"
             }`}
           >
@@ -165,7 +165,9 @@ export default function MessageBubble({
                     initial={{ opacity: 0, scale: 0.8, y: -4 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="absolute bottom-full left-0 mb-1 flex gap-1 rounded-full border border-[#e5dfe9] bg-white p-1 shadow-lg"
+                    className={`absolute bottom-full mb-1 flex gap-1 rounded-full border border-[#e5dfe9] bg-white p-1 shadow-lg ${
+                      mine ? "right-0" : "left-0"
+                    }`}
                   >
                     {QUICK_EMOJIS.map((emoji) => (
                       <button

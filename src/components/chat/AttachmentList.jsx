@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { formatFileSize, isPreviewableImage } from "../../utils/files";
 
 function FileIcon() {
@@ -18,25 +19,60 @@ function FileIcon() {
   );
 }
 
+function ImageAttachment({ file, mine }) {
+  const [loadError, setLoadError] = useState(false);
+
+  if (loadError) {
+    return (
+      <a
+        href={file.url}
+        download={file.name}
+        aria-label={`Download ${file.name}`}
+        className={`flex min-w-[190px] items-center gap-2.5 rounded-xl px-3 py-2 transition ${
+          mine
+            ? "bg-white/10 hover:bg-white/15"
+            : "bg-[#f6f3f8] hover:bg-[#f0ebf4]"
+        }`}
+      >
+        <span className={mine ? "text-[#E3C8F4]" : "text-[#7F5D99]"}>
+          <FileIcon />
+        </span>
+        <span className="min-w-0">
+          <span className="block truncate text-[11px] font-semibold">
+            {file.name}
+          </span>
+          <span className="block text-[10px] opacity-70">
+            {formatFileSize(file.size)}
+          </span>
+        </span>
+      </a>
+    );
+  }
+
+  return (
+    <a
+      href={file.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open image ${file.name}`}
+      className="block overflow-hidden rounded-xl"
+    >
+      <img
+        src={file.url}
+        alt={file.name}
+        onError={() => setLoadError(true)}
+        className="block max-h-56 max-w-full object-cover"
+      />
+    </a>
+  );
+}
+
 export default function AttachmentList({ attachments, mine }) {
   return (
     <div className="mb-1.5 flex flex-col gap-1.5">
       {attachments.map((file) =>
         isPreviewableImage(file.type) ? (
-          <a
-            key={file.id}
-            href={file.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Open image ${file.name}`}
-            className="block overflow-hidden rounded-xl"
-          >
-            <img
-              src={file.url}
-              alt={file.name}
-              className="block max-h-56 max-w-full object-cover"
-            />
-          </a>
+          <ImageAttachment key={file.id} file={file} mine={mine} />
         ) : (
           <a
             key={file.id}

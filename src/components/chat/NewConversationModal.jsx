@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import FormField, { inputClass } from "../../common/FormField";
 import { avatars } from "../../data/avatars";
@@ -11,7 +11,14 @@ export default function NewConversationModal({ isOpen, onClose, onCreate }) {
   const [status, setStatus] = useState("active");
   const [error, setError] = useState("");
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,14 +43,23 @@ export default function NewConversationModal({ isOpen, onClose, onCreate }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+      {isOpen && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 8 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 8 }}
-          transition={{ duration: 0.18 }}
-          className="w-full max-w-md rounded-2xl border border-[#ece7f0] bg-white p-5 shadow-2xl shadow-[#4C2365]/20 sm:p-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onClose();
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs"
         >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 8 }}
+            transition={{ duration: 0.18 }}
+            className="w-full max-w-md rounded-2xl border border-[#ece7f0] bg-white p-5 shadow-2xl shadow-[#4C2365]/20 sm:p-6"
+          >
           <div className="flex items-center justify-between pb-3 border-b border-[#ece7f0]">
             <h2 className="font-dogica-pixel text-[13px] font-bold text-[#211b28]">
               New Conversation
@@ -174,7 +190,8 @@ export default function NewConversationModal({ isOpen, onClose, onCreate }) {
             </div>
           </form>
         </motion.div>
-      </div>
-    </AnimatePresence>
-  );
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
 }

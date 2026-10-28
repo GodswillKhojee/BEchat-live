@@ -88,12 +88,14 @@ export default function Loginpage() {
           <div className="my-auto w-full max-w-[420px] py-3">
             {/* Mobile logo */}
             <div className="mb-5 flex items-center gap-2.5 text-sm font-bold md:hidden">
-              <img
-                src={logo}
-                alt=""
-                className="h-[60px] w-[60px] object-contain brightness-0 invert"
-              />
-              <span>ChatLive</span>
+              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white p-2 shadow-sm border border-[#ece7f0]">
+                <img
+                  src={logo}
+                  alt="ChatLive"
+                  className="h-full w-full object-contain"
+                />
+              </span>
+              <span className="font-dogica-pixel text-[13px] font-bold text-[#211b28]">ChatLive</span>
             </div>
 
             <AuthTabs mode={mode} onChange={handleModeSwitch} />

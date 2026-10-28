@@ -33,10 +33,14 @@ export default function useProfileForm() {
     setErrorMessage("");
   };
 
-  const isDirty = Object.keys(profile).some((key) => profile[key] !== user[key]);
+  const isDirty = Boolean(
+    user &&
+      profile &&
+      Object.keys({ ...user, ...profile }).some((key) => profile[key] !== user[key])
+  );
 
   const reset = () => {
-    setProfile(user);
+    setProfile(user || {});
     setMessage("");
     setErrorMessage("");
   };

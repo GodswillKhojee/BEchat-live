@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import Card from "../../common/Card";
-import { statusOptions } from "./Status";
+import { statusOptions } from "../../constants/status";
 
 export default function StatusPicker({ value, onChange }) {
   return (

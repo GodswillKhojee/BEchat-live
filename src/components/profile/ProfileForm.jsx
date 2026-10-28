@@ -31,7 +31,7 @@ export default function ProfileForm({
         <FormField
           label="Display name"
           name="displayName"
-          value={profile.displayName}
+          value={profile.displayName || ""}
           onChange={onChange}
           placeholder="Your name"
           autoComplete="name"
@@ -44,7 +44,7 @@ export default function ProfileForm({
           hint="Account ID"
           type="email"
           name="email"
-          value={profile.email}
+          value={profile.email || ""}
           autoComplete="email"
           disabled
           readOnly
@@ -53,7 +53,7 @@ export default function ProfileForm({
         <FormField
           label="Job title"
           name="title"
-          value={profile.title}
+          value={profile.title || ""}
           onChange={onChange}
           placeholder="What do you do?"
           autoComplete="organization-title"
@@ -63,7 +63,7 @@ export default function ProfileForm({
         <FormField label="Time zone">
           <select
             name="timezone"
-            value={profile.timezone}
+            value={profile.timezone || "UTC"}
             onChange={onChange}
             className={inputClass}
           >
@@ -77,11 +77,11 @@ export default function ProfileForm({
 
         <FormField
           label="About you"
-          hint={`${profile.bio.length}/${BIO_LIMIT}`}
+          hint={`${(profile.bio || "").length}/${BIO_LIMIT}`}
           multiline
           rows={3}
           name="bio"
-          value={profile.bio}
+          value={profile.bio || ""}
           onChange={onChange}
           placeholder="A short line for your teammates"
           maxLength={BIO_LIMIT}
